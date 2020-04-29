@@ -1,0 +1,44 @@
+service:
+  name: restaurant-menu-feature
+# app and org for use with dashboard.serverless.com
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-dynamodb-local
+  - serverless-iam-roles-per-function
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    DYNAMODB_CATEGORIES_TABLE_NAME: Categories-${self:provider.stage}
+    DYNAMODB_ITEMS_TABLE_NAME: Items-${self:provider.stage}
+    DYNAMODB_BILLING_MODE: PAY_PER_REQUEST
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          method: get
+          path: hello
+
+
+      
