@@ -1,8 +1,6 @@
 service:
   name: restaurant-menu-feature
 # app and org for use with dashboard.serverless.com
-app: restaurante-menu-feature
-org: bennun.com
 
 custom:
   webpack:
