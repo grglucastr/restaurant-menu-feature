@@ -33,6 +33,7 @@ provider:
     DYNAMODB_ITEMS_TABLE_NAME: Items-${self:provider.stage}
     DYNAMODB_ITEMS_TABLE_INDEX: items-idx
     DYNAMODB_BILLING_MODE: PAY_PER_REQUEST
+    S3_BUCKET_IMAGES: bennun-imgs-restaurant-${self:provider.stage}
 
 functions:
   hello:
@@ -113,9 +114,37 @@ resources:
 
               - AttributeName: itemId
                 KeyType: RANGE
+  
+    S3BucketImages:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.S3_BUCKET_IMAGES}
+        CorsConfiguration:
+          CorsRules:
+            - 
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - POST
+                - GET
+                - DELETE
+                - HEAD
+                - PUT
+              MaxAge: 100
 
-
-
-
-
-
+    S3BucketImagesPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref S3BucketImages
+        PolicyDocument:
+          Id: MyPolicy
+          Version: "2012-10-17"
+          Statement:
+            -
+              Sid: PublicReadForGetObjects
+              Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: 'arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*'
