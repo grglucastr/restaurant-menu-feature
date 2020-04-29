@@ -29,7 +29,9 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     DYNAMODB_CATEGORIES_TABLE_NAME: Categories-${self:provider.stage}
+    DYNAMODB_CATEGORIES_TABLE_INDEX: category-idx
     DYNAMODB_ITEMS_TABLE_NAME: Items-${self:provider.stage}
+    DYNAMODB_ITEMS_TABLE_INDEX: items-idx
     DYNAMODB_BILLING_MODE: PAY_PER_REQUEST
 
 functions:
@@ -40,5 +42,80 @@ functions:
           method: get
           path: hello
 
+resources:
+  Resources:
+    DynamoDBTableCategories:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_CATEGORIES_TABLE_NAME}
+        BillingMode: ${self:provider.environment.DYNAMODB_BILLING_MODE}
+        AttributeDefinitions:
+          -
+            AttributeName: restaurantId
+            AttributeType: S
+          -
+            AttributeName: categoryId
+            AttributeType: S
+          - 
+            AttributeName: createdAt
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: restaurantId
+            KeyType: HASH
+          -
+            AttributeName: createdAt
+            KeyType: RANGE
+        LocalSecondaryIndexes:
+          -
+            IndexName: ${self:provider.environment.DYNAMODB_CATEGORIES_TABLE_INDEX}
+            Projection:
+              ProjectionType: ALL
+            KeySchema:        
+            - 
+              AttributeName: restaurantId
+              KeyType: HASH
+            -
+              AttributeName: categoryId
+              KeyType: RANGE
 
-      
+    DynamoDBTableItems:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_ITEMS_TABLE_NAME}
+        BillingMode: ${self:provider.environment.DYNAMODB_BILLING_MODE}
+        AttributeDefinitions:
+          -
+            AttributeName: categoryId
+            AttributeType: S
+          -
+            AttributeName: itemId
+            AttributeType: S
+          -
+            AttributeName: createdAt
+            AttributeType: S
+        KeySchema:
+          - 
+            AttributeName: categoryId
+            KeyType: HASH
+          -
+            AttributeName: createdAt
+            KeyType: RANGE
+        LocalSecondaryIndexes:
+          -
+            IndexName: ${self:provider.environment.DYNAMODB_ITEMS_TABLE_INDEX}
+            Projection:
+              ProjectionType: ALL
+            KeySchema:
+              - 
+                AttributeName: categoryId
+                KeyType: HASH
+
+              - AttributeName: itemId
+                KeyType: RANGE
+
+
+
+
+
+
