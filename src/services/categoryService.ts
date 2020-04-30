@@ -51,6 +51,15 @@ export default class CategoryService{
     {} as Category : 
     category.Items[0] as Category;
   }
-  
+
+  async deleteCategory(category: Category): Promise<void> {
+    await docClient.delete({
+      TableName: TABLE_NAME,
+      Key: {
+        restaurantId: category.restaurantId,
+        createdAt: category.createdAt
+      }
+    }).promise();
+  }
 
 }

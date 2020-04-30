@@ -24,3 +24,7 @@ export const createCategory = (restaurantId:string, categoryRequest: CategoryReq
 export const getSingleCategory = (restaurantId:string, categoryId:string): Promise<Category> => {
   return categoryService.getSingleCategory(restaurantId, categoryId);
 }
+
+export const deleteCategory = (category: Category): Promise<void> => {
+  return categoryService.deleteCategory(category);
+}
