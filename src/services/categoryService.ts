@@ -62,4 +62,22 @@ export default class CategoryService{
     }).promise();
   }
 
+  async updateCategory(category: Category): Promise<Category> {
+    await docClient.update({
+      TableName: TABLE_NAME,
+      Key:{
+        restaurantId: category.restaurantId,
+        createdAt: category.createdAt
+      },
+      UpdateExpression: 'SET #nm = :nm',
+      ExpressionAttributeNames: {
+        '#nm':'name'
+      },
+      ExpressionAttributeValues: {
+        ':nm': category.name
+      }
+    }).promise();
+
+    return category as Category;
+  }
 }

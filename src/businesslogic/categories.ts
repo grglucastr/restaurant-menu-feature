@@ -28,3 +28,13 @@ export const getSingleCategory = (restaurantId:string, categoryId:string): Promi
 export const deleteCategory = (category: Category): Promise<void> => {
   return categoryService.deleteCategory(category);
 }
+
+export const updateCategory = (category:Category, categoryRequest: CategoryRequest): Promise<Category> => {
+
+  const newInfos: Category = {
+    ...category,
+    name: categoryRequest.name
+  }
+
+  return categoryService.updateCategory(newInfos);
+}
