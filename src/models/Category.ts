@@ -1,4 +1,4 @@
-export interface Category{
+export default interface Category{
   restaurantId: string
   createdAt: string
   categoryId: string

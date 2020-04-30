@@ -1,28 +1,17 @@
 import {APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import dbclient from '../../utils/dbclient';
-
-const TABLE_NAME = process.env.DYNAMODB_CATEGORIES_TABLE_NAME;
-const docClient = dbclient();
+import { getCategories } from '../../businesslogic/categories';
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   console.log(event);
+  const restaurantId = "1";
 
-  const categories = await docClient.query({
-    TableName: TABLE_NAME,
-    KeyConditionExpression: '#rId = :rId',
-    ExpressionAttributeNames: {
-      '#rId':'restaurantId'
-    },
-    ExpressionAttributeValues: {
-      ':rId': '1'
-    }
-  }).promise();
+  const categories = await getCategories(restaurantId);
   
   return {
     statusCode: 200,
     headers:{
       'Access-Control-Allow-Origin':'*'
     },
-    body: JSON.stringify({items: categories.Items})
+    body: JSON.stringify({items: categories})
   }
 }
