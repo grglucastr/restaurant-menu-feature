@@ -44,6 +44,7 @@ functions:
         http:
           method: post
           path: /categories
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -63,6 +64,7 @@ functions:
         http:
           method: get
           path: /categories
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -82,6 +84,7 @@ functions:
         http:
           method: get
           path: /categories/{categoryId}
+          cors: true
     iamRoleStatements:
       - 
         Effect: Allow
@@ -101,6 +104,7 @@ functions:
         http:
           method: patch
           path: /categories/{categoryId}
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -123,6 +127,7 @@ functions:
         http:
           method: delete
           path: /categories/{categoryId}
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -142,6 +147,7 @@ functions:
         http:
           method: post
           path: /categories/{categoryId}/items
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -161,6 +167,7 @@ functions:
         http:
           method: get
           path: /categories/{categoryId}/items
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -180,6 +187,7 @@ functions:
         http:
           method: get
           path: /categories/{categoryId}/items/{itemId}
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -199,6 +207,7 @@ functions:
         http:
           method: patch
           path: /categories/{categoryId}/items/{itemId}
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -221,6 +230,7 @@ functions:
         http:
           method: delete
           path: /categories/{categoryId}/items/{itemId}
+          cors: true
     iamRoleStatements:
       -
         Effect: Allow
@@ -240,6 +250,7 @@ functions:
         http:
           method: post
           path: /categories/{categoryId}/items/{itemId}
+          cors: true
     iamStatementRoles:
       -
         Effect: Allow
