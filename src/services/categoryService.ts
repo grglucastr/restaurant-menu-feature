@@ -21,6 +21,15 @@ export default class CategoryService{
 
     return categories.Items as Category[];
   }
+
+  async createCategory (category: Category): Promise<Category> {
+    await docClient.put({
+      TableName: TABLE_NAME,
+      Item: category
+    }).promise();
+
+    return category;
+  }
   
 
 }
