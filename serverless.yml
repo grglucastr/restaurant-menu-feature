@@ -40,6 +40,7 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
+    APP_REGION: ${self:provider.region}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     DYNAMODB_CATEGORIES_TABLE_NAME: Categories-${self:provider.stage}
     DYNAMODB_CATEGORIES_TABLE_INDEX: category-idx
@@ -47,6 +48,14 @@ provider:
     DYNAMODB_ITEMS_TABLE_INDEX: items-idx
     DYNAMODB_BILLING_MODE: PAY_PER_REQUEST
     S3_BUCKET_IMAGES: bennun-imgs-restaurant-${self:provider.stage}
+    S3_SIGNED_URL_EXPIRATION_SECONDS: 120
+
+  iamRoleStatements:
+    -
+      Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
 
 functions:
 
@@ -259,12 +268,12 @@ functions:
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_ITEMS_TABLE_NAME}
 
   getSignedUrl:
-    handler: src/lambda/http/getSignedUrl.handler
+    handler: src/lambda/s3/getSignedUrl.handler
     events:
       -
         http:
           method: post
-          path: /categories/{categoryId}/items/{itemId}
+          path: /items/{itemId}/attachment
           cors: true
     iamStatementRoles:
       -
