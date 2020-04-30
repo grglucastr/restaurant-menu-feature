@@ -36,12 +36,202 @@ provider:
     S3_BUCKET_IMAGES: bennun-imgs-restaurant-${self:provider.stage}
 
 functions:
-  hello:
-    handler: handler.hello
+
+  createCategories:
+    handler: src/lambda/http/createCategory.handler
     events:
-      - http:
+      -
+        http:
+          method: post
+          path: /categories
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action:
+          - s3:PutObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_CATEGORIES_TABLE_NAME}
+      
+  getCategories:
+    handler: src/lambda/http/getCategories.handler
+    events:
+      - 
+        http:
           method: get
-          path: hello
+          path: /categories
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action: 
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_CATEGORIES_TABLE_NAME}
+
+  getSingleCategory:
+    handler: src/lambda/http/getSingleCategory.handler
+    events:
+      -
+        http:
+          method: get
+          path: /categories/{categoryId}
+    iamRoleStatements:
+      - 
+        Effect: Allow
+        Action:
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_CATEGORIES_TABLE_NAME}
+
+  updateCategory:
+    handler: src/lambda/http/updateCategory.handler
+    events:
+      -
+        http:
+          method: patch
+          path: /categories/{categoryId}
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action:
+          - s3:GetObject
+          - s3:PutObject
+          - s3:DeleteObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_CATEGORIES_TABLE_NAME}
+
+  deleteCategory:
+    handler: src/lambda/http/deleteCategory.handler
+    events:
+      -
+        http:
+          method: delete
+          path: /categories/{categoryId}
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_CATEGORIES_TABLE_NAME}
+      -
+        Effect: Allow
+        Action:
+          - s3:DeleteObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+  
+  createItem:
+    handler: src/lambda/http/createItem.handler
+    events:
+      -
+        http:
+          method: post
+          path: /categories/{categoryId}/items
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action:
+          - s3:PutObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_ITEMS_TABLE_NAME}
+
+  getItems:
+    handler: src/lambda/http/getItems.handler
+    events:
+      -
+        http:
+          method: get
+          path: /categories/{categoryId}/items
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action:
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_ITEMS_TABLE_NAME}
+
+  getSingleItem:
+    handler: src/lambda/http/getSingleItem.handler
+    events:
+      -
+        http:
+          method: get
+          path: /categories/{categoryId}/items/{itemId}
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action:
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_ITEMS_TABLE_NAME}
+
+  updateItem:
+    handler: src/lambda/http/updateItem.handler
+    events:
+      -
+        http:
+          method: patch
+          path: /categories/{categoryId}/items/{itemId}
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action:
+          - s3:GetObject
+          - s3:PutObject
+          - s3:DeleteObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_ITEMS_TABLE_NAME}
+  
+  deleteItem:
+    handler: src/lambda/http/deleteItem.handler
+    events:
+      -
+        http:
+          method: delete
+          path: /categories/{categoryId}/items/{itemId}
+    iamRoleStatements:
+      -
+        Effect: Allow
+        Action:
+          - s3:DeleteObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+      -
+        Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_ITEMS_TABLE_NAME}
 
 resources:
   Resources:
