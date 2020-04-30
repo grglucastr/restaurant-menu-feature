@@ -30,6 +30,27 @@ export default class CategoryService{
 
     return category;
   }
+
+  async getSingleCategory(restaurantId:string, categoryId: string): Promise<Category> {
+    
+    const category = await docClient.query({
+      TableName: TABLE_NAME,
+      KeyConditionExpression: '#rId = :rId',
+      FilterExpression: '#cId = :cId',
+      ExpressionAttributeNames: {
+        '#rId':'restaurantId',
+        '#cId': 'categoryId'
+      },
+      ExpressionAttributeValues: {
+        ':rId': restaurantId,
+        ':cId': categoryId
+      }
+    }).promise();
+
+    return category.Count === 0 ? 
+    {} as Category : 
+    category.Items[0] as Category;
+  }
   
 
 }

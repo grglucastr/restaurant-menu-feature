@@ -20,3 +20,7 @@ export const createCategory = (restaurantId:string, categoryRequest: CategoryReq
 
   return categoryService.createCategory(category);
 }
+
+export const getSingleCategory = (restaurantId:string, categoryId:string): Promise<Category> => {
+  return categoryService.getSingleCategory(restaurantId, categoryId);
+}
