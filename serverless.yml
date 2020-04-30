@@ -233,6 +233,22 @@ functions:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_ITEMS_TABLE_NAME}
 
+  getSignedUrl:
+    handler: src/lambda/http/getSignedUrl.handler
+    events:
+      -
+        http:
+          method: post
+          path: /categories/{categoryId}/items/{itemId}
+    iamStatementRoles:
+      -
+        Effect: Allow
+        Action: 
+          - s3:PutObject
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_IMAGES}/*
+
+
+
 resources:
   Resources:
     DynamoDBTableCategories:
