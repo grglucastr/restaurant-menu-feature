@@ -1,29 +1,25 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
+import { getItems } from '../../businesslogic/items';
+import { getSingleCategory } from '../../businesslogic/categories';
 
-import dbclient from '../../utils/dbclient';
-
-const TABLE_NAME = process.env.DYNAMODB_ITEMS_TABLE_NAME;
-const docClient = dbclient();
+import Category from '../../models/Category';
+import notFoundResponse from '../../utils/notFoundResponse';
 
 export const handler:APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) : Promise<APIGatewayProxyResult> => {
-  const { categoryId } = event.pathParameters;
-    
-  const items = await docClient.query({
-    TableName: TABLE_NAME,
-    KeyConditionExpression: '#catId = :catId',
-    ExpressionAttributeNames: {
-      '#catId':'categoryId',
-    },
-    ExpressionAttributeValues: {
-      ':catId': categoryId
-    }
-  }).promise();
+  const { categoryId } = event.pathParameters; 
+  const restaurantId = '1';
+
+  const category: Category = await getSingleCategory(restaurantId, categoryId);
+  if(Object.keys(category).length === 0){
+    return notFoundResponse("Category");
+  }
+  const items = await getItems(categoryId);
 
   return {
     statusCode: 200,
     headers:{
       'Access-Control-Allow-Origin':'*'
     },
-    body: JSON.stringify({items: items.Items})
+    body: JSON.stringify({items})
   }
 }

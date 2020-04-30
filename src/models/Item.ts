@@ -1,5 +1,5 @@
-export interface Item {
-  restaurantId: string
+export default interface Item {
+  restaurantId?: string
   categoryId: string
   itemId: string
   createdAt: string
