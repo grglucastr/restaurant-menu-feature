@@ -37,6 +37,7 @@ export const Auth0Provider = ({
         const user = await auth0FromHook.getUser();
         const claims = await auth0FromHook.getIdTokenClaims();
         console.log("id token: ", claims.__raw);
+        localStorage.setItem('id_token', claims.__raw);
         
         setUser(user);
       }
