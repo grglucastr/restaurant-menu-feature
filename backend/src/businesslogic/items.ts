@@ -4,7 +4,7 @@ import Item from '../models/Item';
 import * as uuid from 'uuid';
 
 const itemService = new ItemService();
-const bucketName = process.env.S3_BUCKET_NAME;
+const bucketName = process.env.S3_BUCKET_IMAGES;
 
 export const createItem = (categoryId:string, requestItem: ItemRequest): Promise<Item> => {
   const itemId: string = uuid.v4();

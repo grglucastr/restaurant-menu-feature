@@ -1,11 +1,13 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { createCategory } from '../../businesslogic/categories';
 import CategoryRequest from '../../requests/categoryRequest';
+import getRestaurantId from '../utils/getRestaurantId';
 
 export const handler:APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) : Promise<APIGatewayProxyResult> => {
   const body = JSON.parse(event.body);
   
-  const restaurantId = "1";
+  const jwtToken = event.headers.Authorization;
+  const restaurantId = getRestaurantId(jwtToken);
   const categoryRequest: CategoryRequest = {
     name: body.name
   }

@@ -3,10 +3,13 @@ import singleItem from '../utils/getSingleItem';
 import { updateItem } from '../../businesslogic/items';
 import Item from '../../models/Item';
 import ItemRequest from '../../requests/itemRequest';
+import getRestaurantId from '../utils/getRestaurantId';
 
 export const handler:APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) : Promise<APIGatewayProxyResult> => {
   const { categoryId, itemId } = event.pathParameters;
-  const restaurantId = '1';
+  const jwtToken = event.headers.Authorization;
+  const restaurantId = getRestaurantId(jwtToken);
+
   const itemRequest: ItemRequest = JSON.parse(event.body);
 
   const item = await singleItem(restaurantId, categoryId, itemId);

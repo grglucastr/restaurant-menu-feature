@@ -59,6 +59,9 @@ provider:
 
 functions:
 
+  RS256Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
+
   createCategories:
     handler: src/lambda/http/createCategory.handler
     events:
@@ -67,6 +70,7 @@ functions:
           method: post
           path: /categories
           cors: true
+          authorizer: RS256Auth
     iamRoleStatements:
       -
         Effect: Allow
@@ -127,6 +131,7 @@ functions:
           method: patch
           path: /categories/{categoryId}
           cors: true
+          authorizer: RS256Auth
     iamRoleStatements:
       -
         Effect: Allow
@@ -150,6 +155,7 @@ functions:
           method: delete
           path: /categories/{categoryId}
           cors: true
+          authorizer: RS256Auth
     iamRoleStatements:
       -
         Effect: Allow
@@ -171,6 +177,7 @@ functions:
           method: post
           path: /categories/{categoryId}/items
           cors: true
+          authorizer: RS256Auth
     iamRoleStatements:
       -
         Effect: Allow
@@ -231,6 +238,7 @@ functions:
           method: patch
           path: /categories/{categoryId}/items/{itemId}
           cors: true
+          authorizer: RS256Auth
     iamRoleStatements:
       -
         Effect: Allow
@@ -254,6 +262,7 @@ functions:
           method: delete
           path: /categories/{categoryId}/items/{itemId}
           cors: true
+          authorizer: RS256Auth
     iamRoleStatements:
       -
         Effect: Allow
@@ -275,6 +284,7 @@ functions:
           method: post
           path: /items/{itemId}/attachment
           cors: true
+          authorizer: RS256Auth
     iamStatementRoles:
       -
         Effect: Allow
