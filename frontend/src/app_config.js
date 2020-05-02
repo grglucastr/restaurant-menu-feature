@@ -1,4 +1,4 @@
-export const API_URL = ``;
+export const API_URL = `http://localhost:3333/dev`;
 
 // Configuration for Auth0
 export const auth = {
