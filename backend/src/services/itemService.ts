@@ -6,33 +6,33 @@ const docClient = dbclient();
 
 
 export default class ItemService{
-  async getAllItems(categoryId: string): Promise<Item[]>{
+  async getAllItems(restaurantId: string): Promise<Item[]>{
     const items = await docClient.query({
       TableName: TABLE_NAME,
-      KeyConditionExpression: '#catId = :catId',
+      KeyConditionExpression: '#rId = :rId',
       ExpressionAttributeNames: {
-        '#catId':'categoryId',
+        '#rId':'restaurantId',
       },
       ExpressionAttributeValues: {
-        ':catId': categoryId
+        ':rId': restaurantId
       }
     }).promise();
 
     return items.Items as Item[];
   }
 
-  async getSingleItem(categoryId:string, itemId:string): Promise<Item> {
+  async getSingleItem(restaurantId:string, itemId:string): Promise<Item> {
     const foundItem = await docClient.query({
       TableName: TABLE_NAME,
-      KeyConditionExpression: '#cId = :cId',
+      KeyConditionExpression: '#rId = :rId',
       FilterExpression: '#itId = :itId',
       ExpressionAttributeNames: {
         '#itId':'itemId',
-        '#cId': 'categoryId'
+        '#rId' :'restaurantId'
       },
       ExpressionAttributeValues: {
         ':itId':itemId,
-        ':cId': categoryId
+        ':rId': restaurantId
       }
     }).promise();
 
@@ -55,7 +55,7 @@ export default class ItemService{
     await docClient.delete({
       TableName: TABLE_NAME,
       Key: {
-        categoryId: item.categoryId,
+        restaurantId: item.restaurantId,
         createdAt: item.createdAt
       }
     }).promise();
@@ -65,17 +65,19 @@ export default class ItemService{
     await docClient.update({
       TableName: TABLE_NAME,
       Key:{
-        categoryId: item.categoryId,
+        restaurantId: item.restaurantId,
         createdAt: item.createdAt
       },
-      UpdateExpression: 'SET #nm = :nm, #pr = :pr',
+      UpdateExpression: 'SET #nm = :nm, #pr = :pr, #cat = :cat',
       ExpressionAttributeNames: {
         '#nm':'name',
-        '#pr':'price'
+        '#pr':'price',
+        '#cat':'categoryId'
       },
       ExpressionAttributeValues: {
         ':nm': item.name,
         ':pr': item.price,
+        ':cat': item.categoryId
       }
     }).promise();
     

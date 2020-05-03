@@ -175,7 +175,7 @@ functions:
       -
         http:
           method: post
-          path: /categories/{categoryId}/items
+          path: /items
           cors: true
           authorizer: RS256Auth
     iamRoleStatements:
@@ -196,7 +196,7 @@ functions:
       -
         http:
           method: get
-          path: /categories/{categoryId}/items
+          path: /items
           cors: true
     iamRoleStatements:
       -
@@ -216,7 +216,7 @@ functions:
       -
         http:
           method: get
-          path: /categories/{categoryId}/items/{itemId}
+          path: /items/{itemId}
           cors: true
     iamRoleStatements:
       -
@@ -236,7 +236,7 @@ functions:
       -
         http:
           method: patch
-          path: /categories/{categoryId}/items/{itemId}
+          path: /items/{itemId}
           cors: true
           authorizer: RS256Auth
     iamRoleStatements:
@@ -260,7 +260,7 @@ functions:
       -
         http:
           method: delete
-          path: /categories/{categoryId}/items/{itemId}
+          path: /items/{itemId}
           cors: true
           authorizer: RS256Auth
     iamRoleStatements:
@@ -338,7 +338,7 @@ resources:
         BillingMode: ${self:provider.environment.DYNAMODB_BILLING_MODE}
         AttributeDefinitions:
           -
-            AttributeName: categoryId
+            AttributeName: restaurantId
             AttributeType: S
           -
             AttributeName: itemId
@@ -348,7 +348,7 @@ resources:
             AttributeType: S
         KeySchema:
           - 
-            AttributeName: categoryId
+            AttributeName: restaurantId
             KeyType: HASH
           -
             AttributeName: createdAt
@@ -360,7 +360,7 @@ resources:
               ProjectionType: ALL
             KeySchema:
               - 
-                AttributeName: categoryId
+                AttributeName: restaurantId
                 KeyType: HASH
 
               - AttributeName: itemId

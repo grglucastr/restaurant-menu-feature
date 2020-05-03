@@ -6,27 +6,29 @@ import * as uuid from 'uuid';
 const itemService = new ItemService();
 const bucketName = process.env.S3_BUCKET_IMAGES;
 
-export const createItem = (categoryId:string, requestItem: ItemRequest): Promise<Item> => {
+export const createItem = (requestItem: ItemRequest): Promise<Item> => {
   const itemId: string = uuid.v4();
   const photo: string = `https://${bucketName}.s3.amazonaws.com/${itemId}`;
   
   const item: Item = {
-    categoryId,
+    ...requestItem,
     itemId,
     createdAt: new Date().toISOString(),
-    ...requestItem,
     photo
   }
+
+  console.log('item', item);
+  
 
   return itemService.createItem(item);
 }
 
-export const getSingleItem = (categoryId:string, itemId:string): Promise<Item> => {
-  return itemService.getSingleItem(categoryId, itemId);
+export const getSingleItem = (restaurantId:string, itemId:string): Promise<Item> => {
+  return itemService.getSingleItem(restaurantId, itemId);
 }
 
-export const getItems = (categoryId:string): Promise<Item[]> => {
-  return itemService.getAllItems(categoryId);
+export const getItems = (restaurantId:string): Promise<Item[]> => {
+  return itemService.getAllItems(restaurantId);
 }
 
 export const updateItem = (item:Item, itemRequest: ItemRequest): Promise<Item> => {

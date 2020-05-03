@@ -1,21 +1,11 @@
-import { getSingleItem } from '../../businesslogic/items';
-import { getSingleCategory } from '../../businesslogic/categories';
-import Category from '../../models/Category';
+import { getSingleItem } from '../../businesslogic/items'
 import Item from '../../models/Item';
 import notFoundResponse from '../../utils/notFoundResponse';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
-export default async (restaurantId: string, categoryId: string, itemId:string) => {
+export default async (restaurantId: string, itemId:string) => {
   
-  const category: Category = await getSingleCategory(restaurantId, categoryId);
-  if(Object.keys(category).length === 0){
-    const response: APIGatewayProxyResult = notFoundResponse("Category");
-    return {
-      error: { content: response }
-    }
-  }
-
-  const item: Item = await getSingleItem(categoryId, itemId);
+    const item: Item = await getSingleItem(restaurantId, itemId);
   if(Object.keys(item).length === 0){
     const response: APIGatewayProxyResult = notFoundResponse("Item");
     return {

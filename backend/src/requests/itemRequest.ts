@@ -1,5 +1,6 @@
 export default interface ItemRequest{
-  restaurantId?: string
+  restaurantId: string,
+  categoryId: string,
   name: string
   price: string
 }
