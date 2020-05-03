@@ -1,4 +1,4 @@
-export const API_URL = `http://localhost:3333/dev`;
+export const API_URL = `https://ny9pe0a82i.execute-api.us-east-1.amazonaws.com/dev`;
 
 // Configuration for Auth0
 export const auth = {
