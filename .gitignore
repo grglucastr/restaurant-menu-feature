@@ -1,5 +1,7 @@
 # package directories
 node_modules
+frontend/node_modules
+backend/node_modules
 jspm_packages
 
 # Serverless directories
@@ -7,6 +9,7 @@ jspm_packages
 
 #dynamodb directories
 .dynamodb
+backend/.dynamodb
 
 # Webpack directories
 .webpack
