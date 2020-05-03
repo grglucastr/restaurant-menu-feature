@@ -13,6 +13,8 @@ import Form from 'react-bootstrap/Form';
 
 const ItemsForm = () => {
 
+  const [isLoading, setLoading] = useState(false);
+
   const { id } = useParams();
   const [categories, setCategories] = useState([]);
   const [item, setItem] = useState({
@@ -34,7 +36,6 @@ const ItemsForm = () => {
   }, []);
 
   useEffect(() => {
-    console.log('itemId', id);
     if(id){
       getById(id).then((resp) => setItem({...resp.item, photo:''}));
     }
@@ -42,23 +43,43 @@ const ItemsForm = () => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-   
 
+    setLoading(true);
 
     if(id){
       update(id, item).then(() => {       
         if(!file){
-          return alert('Updated');
+          alert('Updated');
+          setLoading(false);
+          history.push('/items');
+          return ;
+
         }
         getSignedUrl(item.itemId).then(({uploadUrl}) => {
           updatePhoto(uploadUrl, file).then(() => {
-            alert('Updated');
+            alert('Updated'); 
+            setLoading(false);
+            history.push('/items');
           });        
         });
       });
 
     }else{
-      addNew(item).then(() => history.push('/items'));
+      addNew(item).then((resp) => {
+        if(!file){
+          alert('Saved');
+          history.push('/items');
+          setLoading(false);
+          return;
+        }     
+        getSignedUrl(resp.item.itemId).then(({uploadUrl}) => {
+          updatePhoto(uploadUrl, file).then(() => {
+            alert('Saved');
+            setLoading(false);
+            history.push('/items');
+          });        
+        });
+      });
       
     }
   }
@@ -126,7 +147,9 @@ const ItemsForm = () => {
                   onClick={() => history.push('/items')}>Cancel</Button>
               </Col>
               <Col className="text-right">
-                <Button type="submit">Save</Button>
+                <Button 
+                  type="submit"
+                  disabled={isLoading}>{ isLoading ? 'Saving...' :  'Save' }</Button>
               </Col>
             </Row>
           </Col>

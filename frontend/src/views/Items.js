@@ -58,7 +58,9 @@ const Items = () => {
               {
                 items.map(item => (
                   <tr key={item.itemId}>
-                    <td></td>
+                    <td>
+                      <img src={`${item.photo}?dt=${new Date().toISOString()}`} height="100" width="100" alt={`-`} />
+                    </td>
                     <td>{item.name}</td>
                     <td>{item.price}</td>
                     <td>

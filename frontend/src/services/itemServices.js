@@ -42,7 +42,6 @@ export const getSignedUrl = async (itemId) => {
 }
 
 export const updatePhoto = async (url, data) => {
-  const token = localStorage.getItem('id_token');
   const response = await axios.put(url, data,{
     headers: {
       'Content-Type': data.type
